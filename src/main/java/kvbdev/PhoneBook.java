@@ -47,6 +47,9 @@ public class PhoneBook {
     }
 
     public String findByName(String name) {
-        return null;
+        if (name == null || name.isEmpty()) return "";
+        return Optional.ofNullable(contactNameIndexMap.get(name))
+                .map(Contact::getPhone)
+                .orElse("");
     }
 }
