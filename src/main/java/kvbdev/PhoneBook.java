@@ -3,6 +3,7 @@ package kvbdev;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.TreeMap;
 
 public class PhoneBook {
 
@@ -24,7 +25,7 @@ public class PhoneBook {
         }
     }
 
-    private final Map<String, Contact> contactNameIndexMap = new HashMap<>();
+    private final Map<String, Contact> contactNameIndexMap = new TreeMap<>();
     private final Map<String, Contact> contactPhoneIndexMap = new HashMap<>();
 
     public int add(String name, String phone) {
@@ -54,6 +55,6 @@ public class PhoneBook {
     }
 
     public void printAllNames() {
-        throw new UnsupportedOperationException("Not Implemented");
+        contactNameIndexMap.keySet().forEach(System.out::println);
     }
 }
