@@ -45,4 +45,8 @@ public class PhoneBook {
                 .map(Contact::getName)
                 .orElse("");
     }
+
+    public String findByName(String name) {
+        return null;
+    }
 }

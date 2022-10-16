@@ -80,4 +80,21 @@ public class PhoneBookTest {
         assertThat(sut.findByNumber(phone), equalTo(expectedName));
     }
 
+    @Test
+    void findByName_success() {
+        String name = "USER1";
+        String phone = "111";
+        sut.add(name, phone);
+        assertThat(sut.findByName(name), equalTo(phone));
+    }
+
+    @ParameterizedTest
+    @EmptySource
+    @NullSource
+    @ValueSource(strings = {"USER1"})
+    void findByName_failure(String name) {
+        String expectedPhoneNumber = "";
+        assertThat(sut.findByName(name), equalTo(expectedPhoneNumber));
+    }
+
 }
