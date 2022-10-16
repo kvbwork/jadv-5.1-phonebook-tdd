@@ -7,10 +7,17 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EmptySource;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Mockito;
+
+import java.io.PrintStream;
+import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
 
 public class PhoneBookTest {
     private PhoneBook sut;
@@ -97,4 +104,62 @@ public class PhoneBookTest {
         assertThat(sut.findByName(name), equalTo(expectedPhoneNumber));
     }
 
+    @Test
+    void printAllNames_anyOrder_success() {
+        List<String> names = List.of("EEE", "DDD", "CCC", "BBB", "AAA");
+        names.forEach(name -> sut.add(name, "111"));
+        final int namesCount = 5;
+
+        PrintStream systemOut = System.out;
+        PrintStream outMock = Mockito.spy(System.out);
+        ArgumentCaptor<String> stringCaptor = ArgumentCaptor.forClass(String.class);
+
+        System.setOut(outMock);
+        try {
+            sut.printAllNames();
+        } finally {
+            System.setOut(systemOut);
+        }
+
+        Mockito.verify(outMock, times(namesCount)).println(stringCaptor.capture());
+        assertThat(stringCaptor.getAllValues(), containsInAnyOrder(names.toArray(String[]::new)));
+    }
+
+    @Test
+    void printAllNames_sorted_success() {
+        String[] expectedNames = {"AAA", "BBB", "CCC", "DDD", "EEE"};
+        final int namesCount = 5;
+
+        List<String> names = List.of("EEE", "DDD", "CCC", "BBB", "AAA");
+        names.forEach(name -> sut.add(name, "111"));
+
+        PrintStream systemOut = System.out;
+        PrintStream outMock = Mockito.spy(System.out);
+        ArgumentCaptor<String> stringCaptor = ArgumentCaptor.forClass(String.class);
+
+        System.setOut(outMock);
+        try {
+            sut.printAllNames();
+        } finally {
+            System.setOut(systemOut);
+        }
+
+        Mockito.verify(outMock, times(namesCount)).println(stringCaptor.capture());
+        assertThat(stringCaptor.getAllValues(), contains(expectedNames));
+    }
+
+    @Test
+    void printAllNames_empty_success() {
+        PrintStream systemOut = System.out;
+        PrintStream outMock = Mockito.spy(System.out);
+
+        System.setOut(outMock);
+        try {
+            sut.printAllNames();
+        } finally {
+            System.setOut(systemOut);
+        }
+
+        Mockito.verify(outMock, never()).print(anyString());
+    }
 }

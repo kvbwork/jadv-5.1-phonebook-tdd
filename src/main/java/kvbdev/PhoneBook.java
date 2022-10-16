@@ -52,4 +52,8 @@ public class PhoneBook {
                 .map(Contact::getPhone)
                 .orElse("");
     }
+
+    public void printAllNames() {
+        throw new UnsupportedOperationException("Not Implemented");
+    }
 }
