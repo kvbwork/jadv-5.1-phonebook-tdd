@@ -6,8 +6,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EmptySource;
 import org.junit.jupiter.params.provider.NullSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
 public class PhoneBookTest {
@@ -59,6 +61,23 @@ public class PhoneBookTest {
         int contactsCount = sut.add("USER1", "222");
         int expectedCount = 1;
         assertThat(contactsCount, is(expectedCount));
+    }
+
+    @Test
+    void findByNumber_success() {
+        String name = "USER1";
+        String phone = "111";
+        sut.add(name, phone);
+        assertThat(sut.findByNumber(phone), equalTo(name));
+    }
+
+    @ParameterizedTest
+    @EmptySource
+    @NullSource
+    @ValueSource(strings = {"111"})
+    void findByNumber_failure(String phone) {
+        String expectedName = "";
+        assertThat(sut.findByNumber(phone), equalTo(expectedName));
     }
 
 }

@@ -34,4 +34,8 @@ public class PhoneBook {
 
         return contactNameIndexMap.size();
     }
+
+    public String findByNumber(String phoneNumber) {
+        return null;
+    }
 }
